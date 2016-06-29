@@ -76,6 +76,32 @@
 		spdif-out;
 	};
 
+	codec_dac1: dac-codec1 {
+		compatible = "ti,pcm5102a";
+		status = "okay";
+	};
+
+	codec_dac2: dac-codec2 {
+		compatible = "ti,pcm5102a";
+		status = "okay";
+	};
+
+	sound1 {
+		compatible = "polyvection,imx-audio-pcm5102a";
+		model = "pcm5102a-audio";
+		cpu-dai = <&sai1>;
+		audio-codec = <&codec_dac1>;
+		status = "okay";
+	};
+
+	sound2 {
+		compatible = "polyvection,imx-audio-pcm5102a";
+		model = "pcm5102a-audio";
+		cpu-dai = <&sai2>;
+		audio-codec = <&codec_dac2>;
+		status = "okay";
+	};
+
 	spi4 {
 		compatible = "spi-gpio";
 		pinctrl-names = "default";
@@ -143,14 +169,6 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c2>;
 	status = "okay";
-
-	codec: wm8960@1a {
-		compatible = "wlf,wm8960";
-		reg = <0x1a>;
-		clocks = <&clks IMX6UL_CLK_SAI2>;
-		clock-names = "mclk";
-		wlf,shared-lrclk;
-	};
 };
 
 &lcdif {
@@ -191,6 +209,18 @@
 	status = "okay";
 };
 
+&sai1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sai1>;
+
+	assigned-clocks = <&clks IMX6UL_CLK_SAI1_SEL>,
+			  <&clks IMX6UL_CLK_SAI1>;
+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
+	assigned-clock-rates = <0>, <786432000>;
+
+	status = "okay";
+};
+
 &sai2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_sai2>;
@@ -198,7 +228,7 @@
 	assigned-clocks = <&clks IMX6UL_CLK_SAI2_SEL>,
 			  <&clks IMX6UL_CLK_SAI2>;
 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
-	assigned-clock-rates = <0>, <12288000>;
+	assigned-clock-rates = <0>, <786432000>;
 
 	status = "okay";
 };
@@ -341,6 +371,16 @@
 				MX6UL_PAD_LCD_VSYNC__LCDIF_VSYNC    0x79
 				/* used for lcd reset */
 				MX6UL_PAD_LCD_RESET__GPIO3_IO04     0x79
+			>;
+		};
+
+		pinctrl_sai1: sai1grp {
+			fsl,pins = <
+				MX6UL_PAD_CSI_DATA05__SAI1_TX_BCLK	0x17088
+				MX6UL_PAD_CSI_DATA04__SAI1_TX_SYNC	0x17088
+				MX6UL_PAD_CSI_DATA07__SAI1_TX_DATA	0x11088
+				MX6UL_PAD_CSI_DATA06__SAI1_RX_DATA	0x11088
+				MX6UL_PAD_CSI_DATA01__SAI1_MCLK		0x17088
 			>;
 		};
 

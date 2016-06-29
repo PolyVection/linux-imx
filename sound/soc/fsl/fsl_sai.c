@@ -9,6 +9,7 @@
  * option) any later version.
  *
  */
+#define DEBUG
 
 #include <linux/busfreq-imx.h>
 #include <linux/clk.h>
@@ -367,6 +368,7 @@ static int fsl_sai_set_bclk(struct snd_soc_dai *dai, bool tx, u32 freq)
 	if (savediv == 0) {
 		dev_err(dai->dev, "failed to derive required %cx rate: %d\n",
 				tx ? 'T' : 'R', freq);
+		dev_dbg(dai->dev, "MCLK: %ldHz\n", clk_rate);
 		return -EINVAL;
 	}
 

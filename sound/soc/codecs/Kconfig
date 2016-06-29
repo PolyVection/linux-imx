@@ -482,6 +482,9 @@ config SND_SOC_PCM1792A
 config SND_SOC_PCM3008
        tristate
 
+config SND_SOC_PCM5102A
+       tristate
+
 config SND_SOC_PCM512x
 	tristate
 
