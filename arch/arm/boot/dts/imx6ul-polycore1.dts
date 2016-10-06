@@ -10,6 +10,7 @@
 /dts-v1/;
 
 #include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
 #include "imx6ul.dtsi"
 
 / {
@@ -56,6 +57,16 @@
 			enable-active-high;
 		};
 
+		wlan_en_reg: fixedregulator@2 {
+			compatible = "regulator-fixed";
+			regulator-name = "wlan-en-regulator";	
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			/* WLAN_EN GPIO for this board - Bank3, pin7 */
+			gpio = <&gpio3 7 0>;
+			enable-active-high;
+		};
+
 		reg_gpio_dvfs: regulator-gpio {
 			compatible = "regulator-gpio";
 			pinctrl-names = "default";
@@ -68,6 +79,21 @@
 			states = <1300000 0x1 1400000 0x0>;
 		};
 	};
+
+
+	kim {
+	        compatible = "kim";
+	        nshutdown_gpio = <73>;  // GPIO3_9 The wl8 driver expects gpio to be an integer,b so gpio5_6 is (5-1)*32+6=134
+	        dev_name = "/dev/ttymxc3";
+	        flow_cntrl = <1>;
+	        baud_rate = <115200>;	
+	};
+
+	btwilink {
+	        compatible = "btwilink";
+	
+	};
+
 
 	sound-spdif {
 		compatible = "fsl,imx-audio-spdif";
@@ -256,6 +282,14 @@
 	status = "okay";
 };
 
+&uart4 {
+	
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart4>;
+	status = "okay";
+	fsl,uart-has-rtscts;      // enable rts/cts usage on uart4
+};
+
 &usbotg2 {
 	dr_mode = "host";
 	disable-over-current;
@@ -279,6 +313,26 @@
 
 &usbphy2 {
 	tx-d-cal = <0x5>;
+};
+
+&usdhc1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usdhc1>;
+	keep-power-in-suspend;	
+ 	enable-sdio-wakeup;
+	vmmc-supply = <&wlan_en_reg>;
+	non-removable;
+	cap-power-off-card;
+	status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	wlcore: wlcore@0 {
+		compatible = "ti,wl1835";
+		reg = <2>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <10 IRQ_TYPE_EDGE_RISING>;
+	};
 };
 
 &usdhc2 {
@@ -409,23 +463,26 @@
 			>;
 		};
 
-		pinctrl_uart2dte: uart2dtegrp {
+		pinctrl_uart4: uart4grp {
 			fsl,pins = <
-				MX6UL_PAD_UART2_TX_DATA__UART2_DTE_RX	0x1b0b1
-				MX6UL_PAD_UART2_RX_DATA__UART2_DTE_TX	0x1b0b1
-				MX6UL_PAD_UART3_RX_DATA__UART2_DTE_CTS	0x1b0b1
-				MX6UL_PAD_UART3_TX_DATA__UART2_DTE_RTS	0x1b0b1
+				MX6UL_PAD_LCD_CLK__UART4_DCE_TX		0x1b0b1
+				MX6UL_PAD_LCD_ENABLE__UART4_DCE_RX	0x1b0b1
+				MX6UL_PAD_LCD_VSYNC__UART4_DCE_RTS	0x1b0b1
+				MX6UL_PAD_LCD_HSYNC__UART4_DCE_CTS	0x1b0b1
+				/*MX6UL_PAD_LCD_DATA04__GPIO3_IO09	0x13059 BT-EN*/
 			>;
 		};
 
 		pinctrl_usdhc1: usdhc1grp {
 			fsl,pins = <
-				MX6UL_PAD_SD1_CMD__USDHC1_CMD     0x17059
-				MX6UL_PAD_SD1_CLK__USDHC1_CLK     0x10071
-				MX6UL_PAD_SD1_DATA0__USDHC1_DATA0 0x17059
-				MX6UL_PAD_SD1_DATA1__USDHC1_DATA1 0x17059
-				MX6UL_PAD_SD1_DATA2__USDHC1_DATA2 0x17059
-				MX6UL_PAD_SD1_DATA3__USDHC1_DATA3 0x17059
+				MX6UL_PAD_SD1_CMD__USDHC1_CMD     	0x17059
+				MX6UL_PAD_SD1_CLK__USDHC1_CLK     	0x10071
+				MX6UL_PAD_SD1_DATA0__USDHC1_DATA0 	0x17059
+				MX6UL_PAD_SD1_DATA1__USDHC1_DATA1 	0x17059
+				MX6UL_PAD_SD1_DATA2__USDHC1_DATA2 	0x17059
+				MX6UL_PAD_SD1_DATA3__USDHC1_DATA3 	0x17059
+				MX6UL_PAD_LCD_DATA02__GPIO3_IO07	0x13059	/*WL EN*/
+				MX6UL_PAD_LCD_DATA05__GPIO3_IO10	0x13059 /*WL IRQ*/
 			>;
 		};
 
