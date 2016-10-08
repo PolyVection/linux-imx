@@ -14,7 +14,7 @@
 #include "imx6ul.dtsi"
 
 / {
-	model = "PolyVection PolyCore1";
+	model = "PolyVection CoreAMP1";
 	compatible = "polyvection,polycore1", "fsl,imx6ul";
 
 	chosen {
