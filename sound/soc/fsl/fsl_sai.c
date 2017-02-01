@@ -10,6 +10,8 @@
  *
  */
 
+#define DEBUG
+
 #include <linux/busfreq-imx.h>
 #include <linux/clk.h>
 #include <linux/delay.h>
