@@ -58,7 +58,7 @@
 		spdif-in;
 	};
 
-	codec_dac1: dac-codec1 {
+	/*codec_dac1: dac-codec1 {
 		compatible = "ti,pcm5102a";
 		status = "okay";
 	};
@@ -68,13 +68,13 @@
 		status = "okay";
 	};
 
-	/*sound1 {
+	sound1 {
 		compatible = "polyvection,imx-audio-pcm512x";
 		model = "pcm512x";
 		cpu-dai = <&sai1>;
 		audio-codec = <&codec1>;
 		status = "okay";
-	};*/
+	};
 
 	sound1 {
 		compatible = "polyvection,imx-audio-pcm5102a";
@@ -90,7 +90,7 @@
 		cpu-dai = <&sai2>;
 		audio-codec = <&codec_dac2>;
 		status = "okay";
-	};
+	};*/
 	
 	leds {
 		compatible = "gpio-leds";
@@ -113,7 +113,7 @@
 
 &clks {
 	assigned-clocks = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
-	assigned-clock-rates = <722534400>;//, <786432000>;	
+	assigned-clock-rates = <11289600>;//, <786432000>;	
 };
 
 &fec1 {
