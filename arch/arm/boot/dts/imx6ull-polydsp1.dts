@@ -58,25 +58,25 @@
 		spdif-in;
 	};
 
-	/*codec_dac1: dac-codec1 {
+	codec_dac1: dac-codec1 {
 		compatible = "ti,pcm5102a";
 		status = "okay";
 	};
 
-	codec_dac2: dac-codec2 {
+	/*codec_dac2: dac-codec2 {
 		compatible = "ti,pcm5102a";
 		status = "okay";
-	};
+	};*/
 
 	sound1 {
-		compatible = "polyvection,imx-audio-pcm512x";
-		model = "pcm512x";
+		compatible = "polyvection,imx-audio-pcm5102a";
+		model = "pcm5102a-audio";
 		cpu-dai = <&sai1>;
-		audio-codec = <&codec1>;
+		audio-codec = <&codec_dac1>;
 		status = "okay";
 	};
 
-	sound1 {
+	/*sound1 {
 		compatible = "polyvection,imx-audio-pcm5102a";
 		model = "pcm5102a-audio";
 		cpu-dai = <&sai1>;
@@ -113,7 +113,7 @@
 
 &clks {
 	assigned-clocks = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
-	assigned-clock-rates = <11289600>;//, <786432000>;	
+	assigned-clock-rates = <786432000>;	
 };
 
 &fec1 {
@@ -175,7 +175,7 @@
 	assigned-clocks = <&clks IMX6UL_CLK_SAI1_SEL>,
 			  <&clks IMX6UL_CLK_SAI1>;
 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
-	assigned-clock-rates = <0>, <11289600>;//, <12288000>;
+	assigned-clock-rates = <0>, <12288000>;
 	//fsl,sai-mclk-direction-output;
 	status = "okay";
 };
@@ -187,7 +187,7 @@
 	assigned-clocks = <&clks IMX6UL_CLK_SAI2_SEL>,
 			  <&clks IMX6UL_CLK_SAI2>;
 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
-	assigned-clock-rates = <0>, <11289600>;//, <12288000>;
+	assigned-clock-rates = <0>, <12288000>;
 
 	status = "okay";
 };
