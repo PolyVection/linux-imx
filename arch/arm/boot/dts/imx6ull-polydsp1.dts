@@ -192,6 +192,18 @@
 	status = "okay";
 };
 
+&sai3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sai3>;
+
+	assigned-clocks = <&clks IMX6UL_CLK_SAI3_SEL>,
+			  <&clks IMX6UL_CLK_SAI3>;
+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
+	assigned-clock-rates = <0>, <12288000>;
+
+	status = "okay";
+};
+
 &spdif {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_spdif_in>;
@@ -284,8 +296,6 @@
 				MX6UL_PAD_CSI_DATA05__SAI1_TX_BCLK	0x11088
 				MX6UL_PAD_CSI_DATA04__SAI1_TX_SYNC	0x11088
 				MX6UL_PAD_CSI_DATA07__SAI1_TX_DATA	0x11088
-				MX6UL_PAD_CSI_DATA06__SAI1_RX_DATA	0x11088
-				MX6UL_PAD_CSI_DATA01__SAI1_MCLK		0x11088
 			>;
 		};
 
@@ -294,16 +304,20 @@
 				MX6UL_PAD_JTAG_TDI__SAI2_TX_BCLK	0x17088
 				MX6UL_PAD_JTAG_TDO__SAI2_TX_SYNC	0x17088
 				MX6UL_PAD_JTAG_TRST_B__SAI2_TX_DATA	0x11088
-				MX6UL_PAD_JTAG_TCK__SAI2_RX_DATA	0x11088
-				MX6UL_PAD_JTAG_TMS__SAI2_MCLK		0x17088
-				MX6UL_PAD_SNVS_TAMPER4__GPIO5_IO04	0x17059
+			>;
+		};
+
+		pinctrl_sai3: sai3grp {
+			fsl,pins = <
+				MX6UL_PAD_LCD_DATA13__SAI3_TX_BCLK	0x17088
+				MX6UL_PAD_LCD_DATA12__SAI3_TX_SYNC	0x17088
+				MX6UL_PAD_LCD_DATA15__SAI3_TX_DATA	0x11088
 			>;
 		};
 		
 		pinctrl_spdif_in: spdifgrp-in {
 			fsl,pins = <
-				MX6UL_PAD_GPIO1_IO09__SPDIF_IN      0x1b0b0
-				/*MX6UL_PAD_JTAG_MOD__SPDIF_OUT           0x1b0b0*/
+				MX6UL_PAD_LCD_DATA08__SPDIF_IN     	0x1b0b0
 			>;
 		};
 
