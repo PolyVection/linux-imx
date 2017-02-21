@@ -25,6 +25,7 @@
 #include <linux/mfd/syscon.h>
 #include "fsl_sai.h"
 
+#include "../codecs/tas5756.h"
 
 struct imx_tas5756_data {
 	struct snd_soc_card card;
@@ -60,8 +61,16 @@ static int imx_tas5756_hw_params(struct snd_pcm_substream *substream,
 	return ret;
 }
 
+static int imx_tas5756_startup(struct snd_pcm_substream *substream) {
+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+	struct snd_soc_codec *codec = rtd->codec;
+	snd_soc_update_bits(codec, TAS5756_POWER, 0xff,0x00);
+	return 0;
+}
+
 static struct snd_soc_ops imx_tas5756_ops = {
 	.hw_params = imx_tas5756_hw_params,
+	.startup = imx_tas5756_startup,
 };
 
 static struct snd_soc_dai_link imx_dai[] = {

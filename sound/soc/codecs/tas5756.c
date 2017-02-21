@@ -575,6 +575,7 @@ static int tas5756_dai_startup_slave(struct snd_pcm_substream *substream,
 	if (IS_ERR(tas5756->sclk)) {
 		dev_info(dev, "No SCLK, using BCLK: %ld\n",
 			 PTR_ERR(tas5756->sclk));
+	
 
 		/* Disable reporting of missing SCLK as an error */
 		regmap_update_bits(regmap, TAS5756_ERROR_DETECT,
@@ -584,6 +585,8 @@ static int tas5756_dai_startup_slave(struct snd_pcm_substream *substream,
 		regmap_update_bits(regmap, TAS5756_PLL_REF,
 				   TAS5756_SREF, TAS5756_SREF_BCK);
 	}
+
+	else dev_info(dev, "SCLK: %ld\n", clk_get_rate(tas5756->sclk));
 
 	return snd_pcm_hw_constraint_list(substream->runtime, 0,
 					  SNDRV_PCM_HW_PARAM_RATE,

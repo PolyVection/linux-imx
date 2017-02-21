@@ -14,8 +14,8 @@
  * General Public License for more details.
  */
 
-#ifndef _SND_SOC_PCM512X
-#define _SND_SOC_PCM512X
+#ifndef _SND_SOC_TAS5756
+#define _SND_SOC_TAS5756
 
 #include <linux/pm.h>
 #include <linux/regmap.h>
