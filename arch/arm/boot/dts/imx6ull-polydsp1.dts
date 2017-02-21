@@ -58,39 +58,34 @@
 		spdif-in;
 	};
 
-	codec_dac1: dac-codec1 {
+	codec_dac: dac-codec1 {
 		compatible = "ti,pcm5102a";
 		status = "okay";
 	};
-
-	/*codec_dac2: dac-codec2 {
-		compatible = "ti,pcm5102a";
-		status = "okay";
-	};*/
 
 	sound1 {
-		compatible = "polyvection,imx-audio-pcm5102a";
-		model = "pcm5102a-audio";
+		compatible = "polyvection,imx-audio-tas5756";
+		model = "tas5756";
 		cpu-dai = <&sai1>;
-		audio-codec = <&codec_dac1>;
-		status = "okay";
-	};
-
-	/*sound1 {
-		compatible = "polyvection,imx-audio-pcm5102a";
-		model = "pcm5102a-audio";
-		cpu-dai = <&sai1>;
-		audio-codec = <&codec_dac1>;
+		audio-codec = <&amp1>;
 		status = "okay";
 	};
 
 	sound2 {
+		compatible = "polyvection,imx-audio-tas5756";
+		model = "tas5756";
+		cpu-dai = <&sai2>;
+		audio-codec = <&amp2>;
+		status = "okay";
+	};
+
+	sound3 {
 		compatible = "polyvection,imx-audio-pcm5102a";
 		model = "pcm5102a-audio";
-		cpu-dai = <&sai2>;
-		audio-codec = <&codec_dac2>;
+		cpu-dai = <&sai3>;
+		audio-codec = <&codec_dac>;
 		status = "okay";
-	};*/
+	};
 	
 	leds {
 		compatible = "gpio-leds";
@@ -162,6 +157,20 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c3>;
 	status = "okay";
+
+	amp1: tas5756@4c {
+		#sound-dai-cells = <0>;
+		compatible = "ti,tas5756";
+		reg = <0x4c>;
+		status = "okay";
+	};
+
+	amp2: tas5756@4d {
+		#sound-dai-cells = <0>;
+		compatible = "ti,tas5756";
+		reg = <0x4d>;
+		status = "okay";
+	};
 };
 
 &pxp {
