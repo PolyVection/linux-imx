@@ -49,6 +49,17 @@
 			gpio = <&gpio1 9 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
 		};
+
+		wlan_en_reg: fixedregulator@2 {
+			compatible = "regulator-fixed";
+			regulator-name = "wlan-en-regulator";	
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			/* WLAN_EN GPIO for this board - Bank1, pin2 */
+			gpio = <&gpio1 2 0>;
+			startup-delay-us = <70000>;
+			enable-active-high;
+		};
 	};
 
 	sound-spdif {
@@ -259,15 +270,23 @@
 };
 
 &usdhc1 {
-	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1>;
-	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
-	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
-	cd-gpios = <&gpio1 19 GPIO_ACTIVE_LOW>;
-	keep-power-in-suspend;
-	enable-sdio-wakeup;
-	vmmc-supply = <&reg_sd1_vmmc>;
+	keep-power-in-suspend;	
+ 	enable-sdio-wakeup;
+	vmmc-supply = <&wlan_en_reg>;
+	non-removable;
+	cap-power-off-card;
 	status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	wlcore: wlcore@0 {
+		compatible = "ti,wl1835";
+		reg = <2>;
+		interrupt-parent = <&gpio1>;
+		interrupts = <6 IRQ_TYPE_EDGE_RISING>;
+	};
 };
 
 &usdhc2 {
