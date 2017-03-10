@@ -41,15 +41,6 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		reg_sd1_vmmc: regulator@1 {
-			compatible = "regulator-fixed";
-			regulator-name = "VSD_3V3";
-			regulator-min-microvolt = <3300000>;
-			regulator-max-microvolt = <3300000>;
-			gpio = <&gpio1 9 GPIO_ACTIVE_HIGH>;
-			enable-active-high;
-		};
-
 		wlan_en_reg: fixedregulator@2 {
 			compatible = "regulator-fixed";
 			regulator-name = "wlan-en-regulator";	
@@ -61,6 +52,19 @@
 			enable-active-high;
 		};
 	};
+
+	kim {
+	        compatible = "kim";
+	        nshutdown_gpio = <0>;  // GPIO3_9 The wl8 driver expects gpio to be an integer,b so gpio5_6 is (5-1)*32+6=134
+	        dev_name = "/dev/ttymxc4";
+	        flow_cntrl = <1>;
+	        baud_rate = <115200>;	
+	};
+
+	btwilink {
+	        compatible = "btwilink";
+	
+};
 
 	sound-spdif {
 		compatible = "fsl,imx-audio-spdif";
@@ -117,14 +121,14 @@
 		audio-codec = <&codec_dac2>;
 		status = "okay";
 	};
-*/
+
 	sound3 {
 		compatible = "polyvection,imx-audio-pcm5102a";
 		model = "pcm5102a-audio";
 		cpu-dai = <&sai3>;
 		audio-codec = <&codec_dac3>;
 		status = "okay";
-	};
+	};*/
 	
 	leds {
 		compatible = "gpio-leds";
@@ -142,7 +146,6 @@
 &cpu0 {
 	arm-supply = <&reg_arm>;
 	soc-supply = <&reg_soc>;
-	//dc-supply = <&reg_gpio_dvfs>;
 };
 
 &clks {
@@ -227,7 +230,6 @@
 			  <&clks IMX6UL_CLK_SAI1>;
 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
 	assigned-clock-rates = <0>, <12288000>;
-	//fsl,sai-mclk-direction-output;
 	status = "okay";
 };
 
@@ -269,6 +271,14 @@
 	status = "okay";
 };
 
+&uart5 {
+	
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart5>;
+	status = "okay";
+	fsl,uart-has-rtscts;      // enable rts/cts usage on uart4
+};
+
 &usdhc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1>;
@@ -303,9 +313,6 @@
 
 		pinctrl_hog_1: hoggrp-1 {
 			fsl,pins = <
-				MX6UL_PAD_UART1_RTS_B__GPIO1_IO19	0x17059 /* SD1 CD */
-				/* MX6UL_PAD_GPIO1_IO05__USDHC1_VSELECT	0x17059  SD1 VSELECT */
-				/*MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x17059 SD1 RESET */
 				MX6UL_PAD_SNVS_TAMPER0__GPIO5_IO00	0x80000000
 				MX6UL_PAD_GPIO1_IO03__REF_CLK_32K 	0x10059
 			>;
@@ -392,6 +399,16 @@
 			fsl,pins = <
 				MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX 0x1b0b1
 				MX6UL_PAD_UART1_RX_DATA__UART1_DCE_RX 0x1b0b1
+			>;
+		};
+
+		pinctrl_uart5: uart5grp {
+			fsl,pins = <
+				MX6UL_PAD_GPIO1_IO04__UART5_DCE_TX	0x1b0b1
+				MX6UL_PAD_GPIO1_IO05__UART5_DCE_RX	0x1b0b1
+				MX6UL_PAD_GPIO1_IO08__UART5_DCE_RTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO09__UART5_DCE_CTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO00__GPIO1_IO00	0x13059 /*BT-EN*/
 			>;
 		};
 
