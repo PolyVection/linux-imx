@@ -111,6 +111,7 @@ config RTL8192CU
 	select RTLWIFI
 	select RTLWIFI_USB
 	select RTL8192C_COMMON
+	select WIRELESS_EXT
 	---help---
 	This is the driver for Realtek RTL8192CU/RTL8188CU 802.11n USB
 	wireless network adapters.

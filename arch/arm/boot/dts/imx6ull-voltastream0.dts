@@ -9,11 +9,11 @@
 /dts-v1/;
 
 #include <dt-bindings/input/input.h>
-#include "imx6ul.dtsi"
+#include "imx6ull.dtsi"
 
 / {
 	model = "PolyVection VoltaStream ZERO";
-	compatible = "polyvection,voltastream0", "fsl,imx6ul";
+	compatible = "polyvection,voltastream0", "fsl,imx6ull";
 
 	chosen {
 		stdout-path = &uart1;
@@ -50,9 +50,9 @@
 	};
 
 	sound1 {
-		compatible = "polyvection,imx-audio-tas5756";
-		model = "tas5756";
-		cpu-dai = <&sai1>;
+		compatible = "polyvection,imx-audio-pcm512x";
+		model = "pcm5121";
+		cpu-dai = <&sai2>;
 		audio-codec = <&dac1>;
 		status = "okay";
 	};
@@ -64,10 +64,11 @@
 			label = "Heartbeat";
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_led_green>;
-			gpios = <&gpio3 0 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "heartbeat";
 		};
 	};
+
 };
 
 &cpu0 {
@@ -88,37 +89,20 @@
 	fsl,ldo-bypass = <0>; /* DCDC, ldo-enable */
 };
 
-&i2c1 {
-	clock-frequency = <100000>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_i2c1>;
-	status = "okay";
-
-	dac1: tas5756@4c {
-		#sound-dai-cells = <0>;
-		compatible = "ti,tas5756";
-		reg = <0x4f>;
-		clocks = <&clks IMX6UL_CLK_SAI1>;
-		status = "okay";
-	};
-};
-
-/*
 &i2c4 {
 	clock-frequency = <100000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c4>;
 	status = "okay";
 
-	dac1: tas5756@4c {
+	dac1: pcm5121@4c {
 		#sound-dai-cells = <0>;
-		compatible = "ti,pcm5242";
+		compatible = "ti,pcm5121";
 		reg = <0x4c>;
-		clocks = <&clks IMX6UL_CLK_SAI2>;
 		status = "okay";
 	};
 };
-*/
+
 
 &pxp {
 	status = "okay";
@@ -136,7 +120,7 @@
 	status = "okay";
 };
 
-/*
+
 &sai2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_sai2>;
@@ -148,7 +132,7 @@
 
 	status = "okay";
 };
-*/
+
 
 &spdif {
 	pinctrl-names = "default";
@@ -199,6 +183,7 @@
 		pinctrl_hog_1: hoggrp-1 {
 			fsl,pins = <
 				MX6UL_PAD_SNVS_TAMPER0__GPIO5_IO00	0x80000000
+				MX6UL_PAD_UART3_TX_DATA__GPIO1_IO24	0x4001f8b0 /* PCM MUTE PULL UP */
 			>;
 		};
 		
