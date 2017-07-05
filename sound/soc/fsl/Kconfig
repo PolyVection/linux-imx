@@ -250,6 +250,45 @@ config SND_SOC_IMX_WM8960
 	  Say Y if you want to add support for SoC audio on an i.MX board with
 	  a wm8960 codec.
 
+config SND_SOC_IMX_PCM5102A
+	tristate "SoC Audio support for i.MX boards with PCM5102A"
+	depends on OF && I2C
+	select SND_SOC_PCM5102A
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with PCM5102A
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a PCM5102A codec.
+
+config SND_SOC_IMX_TAS5756
+	tristate "SoC Audio support for i.MX boards with TAS5756"
+	depends on OF && I2C
+	select SND_SOC_TAS5756_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with TAS5756
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a TAS5756 amplifier.
+
+config SND_SOC_IMX_PCM512X
+	tristate "SoC Audio support for i.MX boards with PCM512X"
+	depends on OF && I2C
+	select SND_SOC_PCM512X_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with PCM512X
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a PCM512X amplifier.
+
 config SND_SOC_IMX_SII902X
 	tristate "SoC Audio support for i.MX boards with sii902x"
 	depends on OF && I2C
