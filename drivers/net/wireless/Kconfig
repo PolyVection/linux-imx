@@ -18,6 +18,7 @@ menuconfig WLAN
 if WLAN
 
 source "drivers/net/wireless/realtek/Kconfig"
+source "drivers/net/wireless/mediatek/Kconfig"
 
 config PCMCIA_RAYCS
 	tristate "Aviator/Raytheon 2.4GHz wireless support"
