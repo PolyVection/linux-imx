@@ -43,6 +43,23 @@ struct imx_priv {
 };
 
 static struct imx_priv card_priv;
+static bool digital_gain_0db_limit = true;
+
+static int imx_pcm512x_init(struct snd_soc_pcm_runtime *rtd)
+{
+	if (digital_gain_0db_limit)
+	{
+		int ret;
+		struct snd_soc_card *card = rtd->card;
+		struct snd_soc_codec *codec = rtd->codec;
+
+		ret = snd_soc_limit_volume(codec, "Digital Playback Volume", 207);
+		if (ret < 0)
+			dev_warn(card->dev, "Failed to set volume limit: %d\n", ret);
+	}
+
+	return 0;
+}
 
 static int imx_pcm512x_hw_params(struct snd_pcm_substream *substream,
 		struct snd_pcm_hw_params *params) {
@@ -71,7 +88,8 @@ static struct snd_soc_dai_link imx_dai[] = {
 	.codec_dai_name = "pcm512x-hifi",
 	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
 			  SND_SOC_DAIFMT_CBS_CFS,
-	.ops = &imx_pcm512x_ops,
+	.ops 		= &imx_pcm512x_ops,
+	.init		= imx_pcm512x_init,
 },
 };
 

@@ -1542,18 +1542,18 @@ static int pcm512x_suspend(struct device *dev)
 	int ret;
 
 	ret = regmap_update_bits(pcm512x->regmap, PCM512x_POWER,
-				 PCM512x_RQPD, PCM512x_RQPD);
+				 PCM512x_RQST, PCM512x_RQST);
 	if (ret != 0) {
-		dev_err(dev, "Failed to request power down: %d\n", ret);
+		dev_err(dev, "Failed to request standby: %d\n", ret);
 		return ret;
 	}
 
-	ret = regulator_bulk_disable(ARRAY_SIZE(pcm512x->supplies),
+	/*ret = regulator_bulk_disable(ARRAY_SIZE(pcm512x->supplies),
 				     pcm512x->supplies);
 	if (ret != 0) {
 		dev_err(dev, "Failed to disable supplies: %d\n", ret);
 		return ret;
-	}
+	}*/
 
 	if (!IS_ERR(pcm512x->sclk))
 		clk_disable_unprepare(pcm512x->sclk);
@@ -1574,12 +1574,12 @@ static int pcm512x_resume(struct device *dev)
 		}
 	}
 
-	ret = regulator_bulk_enable(ARRAY_SIZE(pcm512x->supplies),
+	/*ret = regulator_bulk_enable(ARRAY_SIZE(pcm512x->supplies),
 				    pcm512x->supplies);
 	if (ret != 0) {
 		dev_err(dev, "Failed to enable supplies: %d\n", ret);
 		return ret;
-	}
+	}*/
 
 	regcache_cache_only(pcm512x->regmap, false);
 	ret = regcache_sync(pcm512x->regmap);
@@ -1589,9 +1589,9 @@ static int pcm512x_resume(struct device *dev)
 	}
 
 	ret = regmap_update_bits(pcm512x->regmap, PCM512x_POWER,
-				 PCM512x_RQPD, 0);
+				 PCM512x_RQST, 0);
 	if (ret != 0) {
-		dev_err(dev, "Failed to remove power down: %d\n", ret);
+		dev_err(dev, "Failed to remove standby: %d\n", ret);
 		return ret;
 	}
 
