@@ -53,7 +53,12 @@
 		compatible = "polyvection,imx-audio-pcm512x";
 		model = "pcm5121";
 		cpu-dai = <&sai2>;
+		gpr = <&gpr 4 0x100000 0x100000>;
+		asrc-controller = <&asrc>;
 		audio-codec = <&dac1>;
+		audio-routing =
+			"CPU-Playback", "ASRC-Playback",
+			"Playback", "CPU-Playback";
 		status = "okay";
 	};
 	
@@ -132,7 +137,6 @@
 
 	status = "okay";
 };
-
 
 &spdif {
 	pinctrl-names = "default";
