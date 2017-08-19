@@ -58,16 +58,16 @@
 			clock-latency = <61036>; /* two CLK32 periods */
 			operating-points = <
 				/* kHz	uV */
-				// 996000  1275000 disabled for the moment
-				// 792000  1300000 disabled for the moment
+				996000  1325000
+				792000  1300000
 				528000	1275000
 				396000	1275000
 				198000	1275000
 			>;
 			fsl,soc-operating-points = <
 				/* KHz	uV */
-				// 996000  1275000 disabled for the moment
-				// 792000  1300000 disabled for the moment
+				996000  1325000
+				792000  1300000
 				528000	1275000
 				396000	1275000
 				198000	1275000
