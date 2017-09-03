@@ -422,7 +422,8 @@ dtb-$(CONFIG_SOC_IMX6ULL) += \
 	imx6ull-9x9-evk.dtb \
 	imx6ull-9x9-evk-btwifi.dtb \
 	imx6ull-9x9-evk-ldo.dtb \
-	imx6ull-voltastream0.dtb
+	imx6ull-voltastream0.dtb \
+	imx6ull-voltastream-amp1.dtb
 dtb-$(CONFIG_SOC_IMX6SLL) += \
 	imx6sll-lpddr2-arm2.dtb \
 	imx6sll-lpddr3-arm2.dtb \
