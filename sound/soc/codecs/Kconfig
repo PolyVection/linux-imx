@@ -880,4 +880,8 @@ config SND_SOC_TPA6130A2
 	tristate "Texas Instruments TPA6130A2 headphone amplifier"
 	depends on I2C
 
+config SND_SOC_IS31AP2121
+	tristate "ISSI IS31AP2121 amplifier"
+	depends on I2C
+
 endmenu

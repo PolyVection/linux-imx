@@ -287,7 +287,20 @@ config SND_SOC_IMX_PCM512X
 	help
 	  SoC Audio support for i.MX boards with PCM512X
 	  Say Y if you want to add support for SoC audio on an i.MX board with
-	  a PCM512X amplifier.
+	  a PCM512X DAC.
+
+config SND_SOC_IMX_IS31AP2121
+	tristate "SoC Audio support for i.MX boards with IS31AP2121"
+	depends on OF && I2C
+	select SND_SOC_PCM512X_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with IS31AP2121
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a IS31AP2121 amplifier.
 
 config SND_SOC_IMX_SII902X
 	tristate "SoC Audio support for i.MX boards with sii902x"
