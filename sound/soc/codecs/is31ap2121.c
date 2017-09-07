@@ -42,9 +42,15 @@
 
 static struct i2c_client *i2c;
 
+#define IS31AP2121_NUM_SUPPLIES 1
+static const char * const is31ap2121_supply_names[IS31AP2121_NUM_SUPPLIES] = {
+	"amppd_reg",
+};
+
 struct is31ap2121_priv {
 	struct regmap *regmap;
 	struct snd_soc_codec *codec;
+	struct regulator_bulk_data supplies[IS31AP2121_NUM_SUPPLIES];
 };
 
 static struct is31ap2121_priv *priv_data;
@@ -122,7 +128,6 @@ static int is31ap2121_probe(struct snd_soc_codec *codec)
 
 	is31ap2121 = snd_soc_codec_get_drvdata(codec);
 
-
 	// Unmute
 	ret = snd_soc_write(codec, AP2121_STATE_CTL_3, 0x00);
 	if (ret < 0) return ret;
@@ -175,19 +180,37 @@ static struct regmap_config is31ap2121_regmap_config = {
 static int is31ap2121_i2c_probe(struct i2c_client *i2c,
 			    const struct i2c_device_id *id)
 {
-	int ret;
+	int ret, i;
 
-	priv_data = devm_kzalloc(&i2c->dev, sizeof *priv_data, GFP_KERNEL);
-	if (!priv_data)
-		return -ENOMEM;
+	struct is31ap2121_priv *is31ap2121;
 
-	priv_data->regmap = devm_regmap_init_i2c(i2c, &is31ap2121_regmap_config);
-	if (IS_ERR(priv_data->regmap)) {
-		ret = PTR_ERR(priv_data->regmap);
+	is31ap2121 = devm_kzalloc(&i2c->dev, sizeof(struct is31ap2121_priv),
+			      GFP_KERNEL);
+
+	is31ap2121->regmap = devm_regmap_init_i2c(i2c, &is31ap2121_regmap_config);
+	if (IS_ERR(is31ap2121->regmap)) {
+		ret = PTR_ERR(is31ap2121->regmap);
 		return ret;
 	}
 
-	i2c_set_clientdata(i2c, priv_data);
+	for (i = 0; i < ARRAY_SIZE(is31ap2121->supplies); i++)
+		is31ap2121->supplies[i].supply = is31ap2121_supply_names[i];
+
+	ret = devm_regulator_bulk_get(&i2c->dev, ARRAY_SIZE(is31ap2121->supplies),
+				      is31ap2121->supplies);
+	if (ret != 0) {
+		dev_err(&i2c->dev, "Failed to request supplies: %d\n", ret);
+		return ret;
+	}
+
+	ret = regulator_bulk_enable(ARRAY_SIZE(is31ap2121->supplies),
+				    is31ap2121->supplies);
+	if (ret != 0) {
+		dev_err(&i2c->dev, "Failed to enable supplies: %d\n", ret);
+		return ret;
+	}
+
+	i2c_set_clientdata(i2c, is31ap2121);
 
 	ret = snd_soc_register_codec(&i2c->dev,
 				     &soc_codec_dev_is31ap2121, &is31ap2121_dai, 1);

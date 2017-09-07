@@ -25,6 +25,9 @@
 #include <linux/mfd/syscon.h>
 #include "fsl_sai.h"
 
+static struct gpio_desc *amp_pd_gpio;
+static struct gpio_desc *amp_rst_gpio;
+static struct gpio_desc *amp_er_gpio;
 
 struct imx_is31ap2121_data {
 	struct snd_soc_card card;
@@ -180,6 +183,7 @@ static void imx_hifi_shutdown(struct snd_pcm_substream *substream)
 	clk_disable_unprepare(data->codec_clk);
 
 	data->is_stream_opened[tx] = false;
+
 }
 
 static struct snd_soc_ops imx_hifi_ops = {
@@ -299,6 +303,7 @@ static int imx_is31ap2121_probe(struct platform_device *pdev)
 
 	if (of_property_read_bool(pdev->dev.of_node, "codec-master"))
 		data->is_codec_master = true;
+
 
 	data->card.dai_link = imx_dai;
 
