@@ -69,7 +69,7 @@
 		compatible = "fsl,imx-audio-spdif";
 		model = "imx-spdif";
 		spdif-controller = <&spdif>;
-		spdif-out;
+		spdif-in;
 	};
 
 	sound1 {
@@ -164,7 +164,7 @@
 
 &spdif {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_spdif_out>;
+	pinctrl-0 = <&pinctrl_spdif_in>;
 	status = "okay";
 };
 
@@ -227,6 +227,7 @@
 				MX6UL_PAD_LCD_CLK__GPIO3_IO00		0x4001f8b0 	/* AMP RST# HIGH */
 				MX6UL_PAD_NAND_DATA05__GPIO4_IO07 	0x4001f8b0 	/* AMP ER# HIGH */
 				MX6UL_PAD_NAND_DATA06__GPIO4_IO08	0x130B0 	/* AMP PD# LOW */
+				MX6UL_PAD_ENET2_TX_CLK__GPIO2_IO14  	0x130B0 	/* SAI MUX LOW (GPIO46 = (A-1)*32 + B) */
 				
 			>;
 		};
@@ -273,8 +274,9 @@
 				MX6UL_PAD_JTAG_TDI__SAI2_TX_BCLK	0x17088
 				MX6UL_PAD_JTAG_TDO__SAI2_TX_SYNC	0x17088
 				MX6UL_PAD_JTAG_TRST_B__SAI2_TX_DATA	0x11088
-				MX6UL_PAD_JTAG_TCK__SAI2_RX_DATA	0x11088
+				/*MX6UL_PAD_JTAG_TCK__SAI2_RX_DATA	0x11088*/
 				MX6UL_PAD_JTAG_TMS__SAI2_MCLK		0x17088
+				MX6UL_PAD_JTAG_TCK__GPIO1_IO14		0x11088 /* PASS THROUGH (GPIO14 as INPUT) */
 			>;
 		};
 
@@ -286,9 +288,9 @@
 			>;
 		};
 		
-		pinctrl_spdif_out: spdifgrp-out {
+		pinctrl_spdif_in: spdifgrp-in {
 			fsl,pins = <
-				MX6UL_PAD_JTAG_MOD__SPDIF_OUT     	0x1b0b0
+				MX6UL_PAD_LCD_DATA08__SPDIF_IN      	0x1b0b0
 			>;
 		};
 
