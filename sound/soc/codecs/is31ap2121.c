@@ -57,12 +57,50 @@ static struct is31ap2121_priv *priv_data;
 
 
 static const DECLARE_TLV_DB_SCALE(is31ap2121_vol_tlv, -10350, 50, 1);
+static const DECLARE_TLV_DB_SCALE(is31ap2121_tone_tlv, -2500, 100, 1);
 
+static const char * const is31ap2121_tone_text[] = {
+	"-12dB", "-11dB", "-10dB", "-9dB", "-8dB", "-7dB", "-6dB", "-5dB", "-4dB", "-3dB", "-2dB", "-1dB", "0dB",
+	"+1dB", "+2dB", "+3dB", "+4dB", "+5dB", "+6dB", "+7dB", "+8dB", "+9dB", "+10dB", "+11dB", "+12dB"
+};
+
+static const unsigned int is31ap2121_tone_values[] = {
+	0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10, 
+	0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0a, 0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03,
+};
+
+static const char * const is31ap2121_surround_text[] = {
+	"No", "Yes"
+};
+
+static const unsigned int is31ap2121_surround_values[] = {
+	0x80, 0x00,
+};
+
+static SOC_VALUE_ENUM_SINGLE_DECL(is31ap2121_bass_ctl,
+				  AP2121_BASS_CTL, 0, 0x1f,
+				  is31ap2121_tone_text,
+				  is31ap2121_tone_values);
+
+static SOC_VALUE_ENUM_SINGLE_DECL(is31ap2121_treble_ctl,
+				  AP2121_TREBLE_CTL, 0, 0x1f,
+				  is31ap2121_tone_text,
+				  is31ap2121_tone_values);
+
+static SOC_VALUE_ENUM_SINGLE_DECL(is31ap2121_surround_ctl,
+				  AP2121_STATE_CTL_4, 0, 0x80,
+				  is31ap2121_surround_text,
+				  is31ap2121_surround_values);
 
 static const struct snd_kcontrol_new is31ap2121_snd_controls[] = {
-	SOC_SINGLE_TLV  ("Digital Playback Volume", AP2121_MASTER_VOL, 0, 255, 1, is31ap2121_vol_tlv),
+	SOC_ENUM("Surround", is31ap2121_surround_ctl),
+	SOC_ENUM("Bass", is31ap2121_bass_ctl),
+	SOC_ENUM("Treble", is31ap2121_treble_ctl),
+	SOC_SINGLE_TLV("Channel 2"  , AP2121_CH2_VOL, 0, 255, 1, is31ap2121_vol_tlv),
 	SOC_SINGLE_TLV("Channel 1"  , AP2121_CH1_VOL, 0, 255, 1, is31ap2121_vol_tlv),
-	SOC_SINGLE_TLV("Channel 2"  , AP2121_CH2_VOL, 0, 255, 1, is31ap2121_vol_tlv)
+	SOC_SINGLE_TLV  ("Digital Playback Volume", AP2121_MASTER_VOL, 0, 255, 1, is31ap2121_vol_tlv),
+	//SOC_SINGLE_TLV("Bass"  , AP2121_BASS_CTL, 0, 25, 1, is31ap2121_tone_tlv),
+	//SOC_SINGLE_TLV("Treble"  , AP2121_TREBLE_CTL, 0, 25, 1, is31ap2121_tone_tlv)
 };
 
 
@@ -128,12 +166,42 @@ static int is31ap2121_probe(struct snd_soc_codec *codec)
 
 	is31ap2121 = snd_soc_codec_get_drvdata(codec);
 
+	// RESET
+	ret = snd_soc_write(codec, AP2121_STATE_CTL_5, 0x12);
+	if (ret < 0) return ret;
+
+	ssleep(1);
+
+	// NORMAL
+	ret = snd_soc_write(codec, AP2121_STATE_CTL_5, 0x32);
+	if (ret < 0) return ret;
+
 	// Unmute
 	ret = snd_soc_write(codec, AP2121_STATE_CTL_3, 0x00);
 	if (ret < 0) return ret;
 
-	// Set volume to 0db
-	ret = snd_soc_write(codec, AP2121_MASTER_VOL, 0x18);
+	// Set volume master
+	ret = snd_soc_write(codec, AP2121_MASTER_VOL, 0x90);
+	if (ret < 0) return ret;
+
+	// Set volume ch1
+	ret = snd_soc_write(codec, AP2121_CH1_VOL, 0x18);
+	if (ret < 0) return ret;
+
+	// Set volume ch2
+	ret = snd_soc_write(codec, AP2121_CH2_VOL, 0x18);
+	if (ret < 0) return ret;
+
+	// Set bass 0dB
+	ret = snd_soc_write(codec, AP2121_BASS_CTL, 0x10);
+	if (ret < 0) return ret;
+
+	// Set treble 0dB
+	ret = snd_soc_write(codec, AP2121_TREBLE_CTL, 0x10);
+	if (ret < 0) return ret;
+
+	// Enable tone ctl
+	ret = snd_soc_write(codec, AP2121_STATE_CTL_4, 0xd0);
 	if (ret < 0) return ret;
 
 
@@ -152,9 +220,13 @@ static struct snd_soc_codec_driver soc_codec_dev_is31ap2121 = {
 
 
 static const struct reg_default is31ap2121_reg_defaults[] = {
-	{ 0x03 ,0x60 },     // R3  - VOL_MASTER    - -40dB
-	{ 0x04 ,0x18 },     // R4  - VOL_CH1	   -   0dB
-	{ 0x05 ,0x18 },     // R5  - VOL_CH2       -   0dB
+	{ 0x02 ,0x00 },     // unmute
+	{ 0x03 ,0x90 },     // VOL_MASTER   
+	{ 0x04 ,0x18 },     // VOL_CH1 0dB
+	{ 0x05 ,0x18 },     // VOL_CH2 0dB
+	{ 0x0a ,0xd0 },	    // tone ctl
+	{ 0x07 ,0x10 },	    // bass 0dB
+	{ 0x08 ,0x10 },	    // treble 0dB
 };
 
 
