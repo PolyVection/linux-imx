@@ -14,6 +14,16 @@
 / {
 	model = "PolyVection VoltaStream AMP1";
 	compatible = "polyvection,voltastream-amp1", "fsl,imx6ull";
+	
+	bt_rfkill {
+		compatible = "net,rfkill-gpio";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_bt_rfkill>;
+		name = "bt_rfkill";
+		type = <2>;	/* bluetooth */
+		reset-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
+	};
+
 
 	chosen {
 		stdout-path = &uart1;
@@ -174,6 +184,14 @@
 	status = "okay";
 };
 
+&uart5 {
+	
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart5>;
+	status = "okay";
+	/*fsl,uart-has-rtscts;*/
+};
+
 &usbotg1 {
 	dr_mode = "peripheral";
 	srp-disable;
@@ -228,6 +246,9 @@
 				MX6UL_PAD_NAND_DATA05__GPIO4_IO07 	0x4001f8b0 	/* AMP ER# HIGH */
 				MX6UL_PAD_NAND_DATA06__GPIO4_IO08	0x130B0 	/* AMP PD# LOW */
 				MX6UL_PAD_ENET2_TX_CLK__GPIO2_IO14  	0x130B0 	/* SAI MUX LOW (GPIO46 = (A-1)*32 + B) */
+				MX6UL_PAD_GPIO1_IO03__REF_CLK_32K 	0x10059
+				MX6UL_PAD_GPIO1_IO06__GPIO1_IO06	0x4001f8b0
+				MX6UL_PAD_GPIO1_IO07__GPIO1_IO07	0x4001f8b0
 				
 			>;
 		};
@@ -298,6 +319,24 @@
 			fsl,pins = <
 				MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX 0x1b0b1
 				MX6UL_PAD_UART1_RX_DATA__UART1_DCE_RX 0x1b0b1
+			>;
+		};
+
+		pinctrl_uart5: uart5grp {
+			fsl,pins = <
+				MX6UL_PAD_GPIO1_IO04__UART5_DCE_TX	0x1b0b1
+				MX6UL_PAD_GPIO1_IO05__UART5_DCE_RX	0x1b0b1
+				/*MX6UL_PAD_GPIO1_IO08__UART5_DTE_CTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO09__UART5_DTE_RTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO08__UART5_DCE_RTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO09__UART5_DCE_CTS	0x1b0b1
+				MX6UL_PAD_GPIO1_IO00__GPIO1_IO00	0x13059 BT-EN*/
+			>;
+		};
+
+		pinctrl_bt_rfkill: bt-rfkillgrp {
+			fsl,pins = <
+				MX6UL_PAD_GPIO1_IO00__GPIO1_IO00	0x4001f8b0
 			>;
 		};
 
