@@ -95,6 +95,14 @@
 			"Playback", "CPU-Playback";
 		status = "okay";
 	};
+
+	sound2 {
+		compatible = "polyvection,imx-audio-pcm186x";
+		model = "pcm186x";
+		cpu-dai = <&sai2>;
+		audio-codec = <&audioadc1>;
+		status = "okay";
+	};
 	
 	leds {
 		compatible = "gpio-leds";
@@ -141,6 +149,15 @@
 		clocks = <&clks IMX6UL_CLK_SAI2>;
 		status = "okay";
 	};
+
+	audioadc1: pcm1862@4a {
+		#sound-dai-cells = <1>;
+		compatible = "ti,pcm1862";
+		reg = <0x4a>;
+		clocks = <&clks IMX6UL_CLK_SAI2>;
+		status = "okay";
+	};
+
 };
 
 
@@ -295,9 +312,9 @@
 				MX6UL_PAD_JTAG_TDI__SAI2_TX_BCLK	0x17088
 				MX6UL_PAD_JTAG_TDO__SAI2_TX_SYNC	0x17088
 				MX6UL_PAD_JTAG_TRST_B__SAI2_TX_DATA	0x11088
-				/*MX6UL_PAD_JTAG_TCK__SAI2_RX_DATA	0x11088*/
+				MX6UL_PAD_JTAG_TCK__SAI2_RX_DATA	0x11088
 				MX6UL_PAD_JTAG_TMS__SAI2_MCLK		0x17088
-				MX6UL_PAD_JTAG_TCK__GPIO1_IO14		0x11088 /* PASS THROUGH (GPIO14 as INPUT) */
+				/*MX6UL_PAD_JTAG_TCK__GPIO1_IO14		0x11088  PASS THROUGH (GPIO14 as INPUT) */
 			>;
 		};
 

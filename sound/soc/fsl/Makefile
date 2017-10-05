@@ -70,6 +70,7 @@ snd-soc-imx-hdmi-objs := imx-hdmi.o
 snd-soc-imx-pcm5102a-objs :=imx-pcm5102a.o
 snd-soc-imx-tas5756-objs :=imx-tas5756.o
 snd-soc-imx-pcm512x-objs :=imx-pcm512x.o
+snd-soc-imx-pcm186x-objs :=imx-pcm186x.o
 snd-soc-imx-is31ap2121-objs :=imx-is31ap2121.o
 
 obj-$(CONFIG_SND_SOC_EUKREA_TLV320) += snd-soc-eukrea-tlv320.o
@@ -91,6 +92,7 @@ obj-$(CONFIG_SND_SOC_IMX_HDMI) += snd-soc-imx-hdmi.o
 obj-$(CONFIG_SND_SOC_IMX_PCM5102A) += snd-soc-imx-pcm5102a.o
 obj-$(CONFIG_SND_SOC_IMX_TAS5756) += snd-soc-imx-tas5756.o
 obj-$(CONFIG_SND_SOC_IMX_PCM512X) += snd-soc-imx-pcm512x.o
+obj-$(CONFIG_SND_SOC_IMX_PCM186X) += snd-soc-imx-pcm186x.o
 obj-$(CONFIG_SND_SOC_IMX_IS31AP2121) += snd-soc-imx-is31ap2121.o
 
 AFLAGS_hdmi_pcm.o := -march=armv7-a -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp

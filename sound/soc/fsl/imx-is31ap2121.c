@@ -224,7 +224,7 @@ static struct snd_soc_dai_link imx_dai[] = {
 		.dynamic = 1,
 		.ignore_pmdown_time = 1,
 		.dpcm_playback = 1,
-		.dpcm_capture = 1,
+		.dpcm_capture = 0,
 	},
 	{
 		.name = "imx-is31ap2121",
@@ -242,7 +242,7 @@ static struct snd_soc_dai_link imx_dai[] = {
 		.no_pcm = 1,
 		.ignore_pmdown_time = 1,
 		.dpcm_playback = 1,
-		.dpcm_capture = 1,
+		.dpcm_capture = 0,
 		.ops = &imx_hifi_ops,
 		.be_hw_params_fixup = be_hw_params_fixup,
 	},
