@@ -159,7 +159,7 @@ static int imx_hifi_hw_free(struct snd_pcm_substream *substream)
 	return 0;
 }
 
-static u32 imx_pcm512x_rates[] = { 8000, 16000, 32000, 44100, 48000, 96000, 192000 };
+static u32 imx_pcm512x_rates[] = { 8000, 16000, 32000, 44100, 48000, 64000, 88200, 96000, 176400, 192000 };
 static struct snd_pcm_hw_constraint_list imx_pcm512x_rate_constraints = {
 	.count = ARRAY_SIZE(imx_pcm512x_rates),
 	.list = imx_pcm512x_rates,

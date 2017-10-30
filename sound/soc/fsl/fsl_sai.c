@@ -906,6 +906,23 @@ static int fsl_sai_probe(struct platform_device *pdev)
 		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_SAI2_MCLK_DIR, IMX6UL_GPR1_SAI2_MCLK_DIR);
 	}
 
+	if (of_find_property(np, "fsl,sai3-mclk-direction-output", NULL) &&
+	    of_device_is_compatible(pdev->dev.of_node, "fsl,imx6ul-sai")) {
+		gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
+		/*if (IS_ERR(gpr)) {
+			dev_err(&pdev->dev, "cannot find iomuxc registers\n");
+			return PTR_ERR(gpr);
+		}
+
+		index = of_alias_get_id(np, "sai");
+		if (index < 0)
+			return index;*/
+		
+		dev_err(&pdev->dev, "MCLK output for SAI3\n");
+
+		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_SAI3_MCLK_DIR, IMX6UL_GPR1_SAI3_MCLK_DIR);
+	}
+
 
 	sai->dma_params_rx.addr = res->start + FSL_SAI_RDR;
 	sai->dma_params_tx.addr = res->start + FSL_SAI_TDR;

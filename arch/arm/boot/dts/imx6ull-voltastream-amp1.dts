@@ -189,6 +189,18 @@
 	status = "okay";
 };
 
+&sai3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sai3>;
+
+	assigned-clocks = <&clks IMX6UL_CLK_SAI3_SEL>,
+			  <&clks IMX6UL_CLK_SAI3>;
+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
+	assigned-clock-rates = <0>, <12288000>;
+	fsl,sai3-mclk-direction-output;
+	status = "okay";
+};
+
 &spdif {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_spdif_in>;
@@ -323,6 +335,7 @@
 				MX6UL_PAD_LCD_DATA13__SAI3_TX_BCLK	0x17088
 				MX6UL_PAD_LCD_DATA12__SAI3_TX_SYNC	0x17088
 				MX6UL_PAD_LCD_DATA15__SAI3_TX_DATA	0x11088
+				MX6UL_PAD_LCD_DATA09__SAI3_MCLK 	0x17088
 			>;
 		};
 		
