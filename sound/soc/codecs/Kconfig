@@ -1096,16 +1096,19 @@ config SND_SOC_IS31AP2121
 	tristate "ISSI IS31AP2121 amplifier"
 	depends on I2C
 
-config SND_SOC_PCM186X_I2C
+config SND_SOC_PCM186x
+	tristate
+
+config SND_SOC_PCM186x_I2C
 	tristate "Texas Instruments PCM186x CODECs - I2C"
 	depends on I2C
-	select SND_SOC_PCM186X
+	select SND_SOC_PCM186x
 	select REGMAP_I2C
 
-config SND_SOC_PCM186X_SPI
+config SND_SOC_PCM186x_SPI
 	tristate "Texas Instruments PCM186x CODECs - SPI"
 	depends on SPI_MASTER
-	select SND_SOC_PCM186X
+	select SND_SOC_PCM186x
 	select REGMAP_SPI
 
 endmenu
