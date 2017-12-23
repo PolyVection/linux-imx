@@ -459,7 +459,8 @@ config USB_CONFIGFS_F_TCM
 
 choice
 	tristate "USB Gadget Drivers"
-	default USB_ETH
+	# default USB_ETH
+	default USB_G_SERIAL
 	help
 	  A Linux "Gadget Driver" talks to the USB Peripheral Controller
 	  driver through the abstract "gadget" API.  Some other operating

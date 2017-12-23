@@ -1014,7 +1014,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
 		fsl_sai_dai.symmetric_samplebits = 0;
 	}
 
-	if (of_find_property(np, "fsl,sai-mclk-direction-output", NULL) &&
+	/*if (of_find_property(np, "fsl,sai-mclk-direction-output", NULL) &&
 	    of_device_is_compatible(np, "fsl,imx6ul-sai")) {
 		gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
 		if (IS_ERR(gpr)) {
@@ -1028,6 +1028,24 @@ static int fsl_sai_probe(struct platform_device *pdev)
 
 		regmap_update_bits(gpr, IOMUXC_GPR1, MCLK_DIR(index),
 				   MCLK_DIR(index));
+	}*/
+
+	if (of_find_property(np, "fsl,sai2-mclk-direction-output", NULL) &&
+	    of_device_is_compatible(pdev->dev.of_node, "fsl,imx6ul-sai")) {
+		gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
+		
+		dev_err(&pdev->dev, "MCLK output for SAI2\n");
+
+		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_SAI2_MCLK_DIR, IMX6UL_GPR1_SAI2_MCLK_DIR);
+	}
+
+	if (of_find_property(np, "fsl,sai3-mclk-direction-output", NULL) &&
+	    of_device_is_compatible(pdev->dev.of_node, "fsl,imx6ul-sai")) {
+		gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
+		
+		dev_err(&pdev->dev, "MCLK output for SAI3\n");
+
+		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_SAI3_MCLK_DIR, IMX6UL_GPR1_SAI3_MCLK_DIR);
 	}
 
 	sai->dma_params_rx.filter_data = "rx";

@@ -1092,4 +1092,20 @@ config SND_SOC_TPA6130A2
 	tristate "Texas Instruments TPA6130A2 headphone amplifier"
 	depends on I2C
 
+config SND_SOC_IS31AP2121
+	tristate "ISSI IS31AP2121 amplifier"
+	depends on I2C
+
+config SND_SOC_PCM186X_I2C
+	tristate "Texas Instruments PCM186x CODECs - I2C"
+	depends on I2C
+	select SND_SOC_PCM186X
+	select REGMAP_I2C
+
+config SND_SOC_PCM186X_SPI
+	tristate "Texas Instruments PCM186x CODECs - SPI"
+	depends on SPI_MASTER
+	select SND_SOC_PCM186X
+	select REGMAP_SPI
+
 endmenu

@@ -431,6 +431,58 @@ config SND_SOC_IMX_HDMI
 	  Say Y if you want to add support for SoC audio on an i.MX board with
 	  IMX HDMI.
 
+config SND_SOC_IMX_PCM5102A
+	tristate "SoC Audio support for i.MX boards with PCM5102A"
+	depends on OF && I2C
+	select SND_SOC_PCM5102A
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with PCM5102A
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a PCM5102A codec.
+
+config SND_SOC_IMX_PCM512X
+	tristate "SoC Audio support for i.MX boards with PCM512X"
+	depends on OF && I2C
+	select SND_SOC_PCM512X_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with PCM512X
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a PCM512X DAC.
+
+config SND_SOC_IMX_PCM186X
+	tristate "SoC Audio support for i.MX boards with PCM186X"
+	depends on OF && I2C
+	select SND_SOC_PCM186X_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with PCM186X
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a PCM186X ADC.
+
+config SND_SOC_IMX_IS31AP2121
+	tristate "SoC Audio support for i.MX boards with IS31AP2121"
+	depends on OF && I2C
+	select SND_SOC_PCM512X_I2C
+	select SND_SOC_IMX_PCM_DMA
+	select SND_SOC_FSL_SAI
+	select SND_SOC_FSL_UTILS
+	select SND_KCTL_JACK
+	help
+	  SoC Audio support for i.MX boards with IS31AP2121
+	  Say Y if you want to add support for SoC audio on an i.MX board with
+	  a IS31AP2121 amplifier.
+
 endif # SND_IMX_SOC
 
 endmenu
