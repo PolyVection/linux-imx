@@ -52,7 +52,7 @@
 	sound1 {
 		compatible = "polyvection,imx-audio-pcm512x";
 		model = "pcm5121";
-		cpu-dai = <&sai3>;
+		cpu-dai = <&sai2>;
 		gpr = <&gpr 4 0x100000 0x100000>;
 		asrc-controller = <&asrc>;
 		audio-codec = <&dac1>;
@@ -92,7 +92,7 @@
         #sound-dai-cells = <0>;
         compatible = "ti,pcm5121";
         reg = <0x4c>;
-        clocks = <&clks IMX6UL_CLK_SAI3>;
+        clocks = <&clks IMX6UL_CLK_SAI2>;
         status = "okay";
     };
 };
