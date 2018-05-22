@@ -48,6 +48,25 @@
 		spdif-controller = <&spdif>;
 		spdif-out;
 	};
+
+	dac1: pcm5102a-codec {
+		#sound-dai-cells = <0>;
+		compatible = "ti,pcm5102a";
+		status = "okay";
+	};
+
+	sound1 {
+		compatible = "polyvection,imx-audio-pcm5102a";
+		model = "pcm5102a";
+		cpu-dai = <&sai3>;
+		gpr = <&gpr 4 0x100000 0x100000>;
+		asrc-controller = <&asrc>;
+		audio-codec = <&dac1>;
+		audio-routing =
+			"CPU-Playback", "ASRC-Playback",
+			"Playback", "CPU-Playback";
+		status = "okay";
+	};
 };
 
 &cpu0 {
